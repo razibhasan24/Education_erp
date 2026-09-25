@@ -4,15 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Section extends Model
+class Group extends Model
 {
-    protected $fillable = ['class_id', 'name', 'capacity', 'is_active'];
+    protected $fillable = ['name', 'name_bn', 'is_active'];
     protected $casts = ['is_active' => 'boolean'];
-
-    public function schoolClass()
-    {
-        return $this->belongsTo(SchoolClass::class, 'class_id');
-    }
 
     public function students()
     {

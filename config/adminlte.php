@@ -759,106 +759,85 @@ return [
     |
     */
 
-    'menu' => [
-        // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'darkmode-widget',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'fullscreen-widget',
-            'topnav_right' => true,
-        ],
+    'usermenu' => [
+    [
+        'text'       => 'প্রোফাইল',
+        'url'        => 'profile',
+        'icon'       => 'fas fa-fw fa-user',
+        'icon_color' => 'primary',
+    ],
+    [
+        'text'       => 'লগআউট',
+        'url'        => 'logout',
+        'method'     => 'POST',
+        'icon'       => 'fas fa-fw fa-sign-out-alt',
+        'icon_color' => 'danger',
+    ],
+],
 
-        // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
-        [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
-        ],
-        [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'bi bi-file-earmark',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'bi bi-person',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'bi bi-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'bi bi-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'danger',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'warning',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'info',
-            'url' => '#',
+
+  'menu' => [
+    ['header' => 'MAIN NAVIGATION'],
+
+    [
+        'text' => 'ড্যাশবোর্ড',
+        'url'  => '/admin/dashboard',
+        'icon' => 'fas fa-tachometer-alt',
+        'can'  => 'institute-settings', // শুধু Admin দেখবে
+    ],
+
+    [
+        'text' => 'একাডেমিক সেটআপ',
+        'icon' => 'fas fa-cog',
+        'can'  => 'class-manage',
+        'submenu' => [
+            ['text' => 'শিক্ষাবর্ষ',  'url' => '/admin/academic/years',    'icon' => 'far fa-calendar',    'can' => 'academic-year'],
+            ['text' => 'শ্রেণি',      'url' => '/admin/academic/classes',  'icon' => 'fas fa-layer-group', 'can' => 'class-manage'],
+            ['text' => 'শাখা',        'url' => '/admin/academic/sections', 'icon' => 'fas fa-columns',     'can' => 'section-manage'],
+            ['text' => 'বিভাগ',       'url' => '/admin/academic/groups',   'icon' => 'fas fa-users',       'can' => 'group-manage'],
+            ['text' => 'বিষয়',       'url' => '/admin/academic/subjects', 'icon' => 'fas fa-book',        'can' => 'subject-manage'],
         ],
     ],
 
+    [
+        'text' => 'শিক্ষার্থী',
+        'icon' => 'fas fa-user-graduate',
+        'can'  => 'student-manage',
+        'submenu' => [
+            ['text' => 'সব শিক্ষার্থী', 'url' => '/admin/students',        'icon' => 'fas fa-list',       'can' => 'student-manage'],
+            ['text' => 'নতুন ভর্তি',   'url' => '/admin/students/create', 'icon' => 'fas fa-user-plus',  'can' => 'student-manage'],
+        ],
+    ],
+
+    [
+        'text' => 'শিক্ষক',
+        'icon' => 'fas fa-chalkboard-teacher',
+        'can'  => 'teacher-manage',
+        'submenu' => [
+            ['text' => 'সব শিক্ষক',    'url' => '/admin/teachers',        'icon' => 'fas fa-list', 'can' => 'teacher-manage'],
+            ['text' => 'নতুন শিক্ষক',  'url' => '/admin/teachers/create', 'icon' => 'fas fa-plus', 'can' => 'teacher-manage'],
+        ],
+    ],
+    [
+    'text' => 'হাজিরা',
+    'icon' => 'fas fa-clipboard-check',
+    'can'  => 'attendance-manage',
+    'submenu' => [
+        ['text' => 'শিক্ষার্থী হাজিরা',    'url' => '/admin/attendance/students',        'icon' => 'fas fa-user-check',   'can' => 'attendance-manage'],
+        ['text' => 'শিক্ষার্থী রিপোর্ট',   'url' => '/admin/attendance/students/report', 'icon' => 'fas fa-chart-bar',    'can' => 'attendance-manage'],
+        ['text' => 'শিক্ষক হাজিরা',        'url' => '/admin/attendance/teachers',        'icon' => 'fas fa-chalkboard-teacher', 'can' => 'attendance-manage'],
+        ['text' => 'শিক্ষক রিপোর্ট',       'url' => '/admin/attendance/teachers/report', 'icon' => 'fas fa-chart-line',   'can' => 'attendance-manage'],
+    ],
+],
+
+    ['header' => 'ACCOUNT'],
+
+    [
+        'text' => 'প্রোফাইল',
+        'url'  => 'profile',
+        'icon' => 'fas fa-user-circle',
+    ],
+],
     /*
     |--------------------------------------------------------------------------
     | Menu Filters
