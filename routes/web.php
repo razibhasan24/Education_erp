@@ -11,6 +11,11 @@ use App\Http\Controllers\Admin\TeacherAttendanceController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MarkController;
 use App\Http\Controllers\Admin\ResultController;
+use App\Http\Controllers\Admin\FeeStructureController;
+use App\Http\Controllers\Admin\FeeInvoiceController;
+use App\Http\Controllers\Admin\FeePaymentController;
+use App\Http\Controllers\Admin\FeeReportController;
+use App\Http\Controllers\Admin\ExpenseController;
 
 
 Route::get('/', fn() => view('welcome'));
@@ -114,6 +119,110 @@ Route::prefix('admin')
             ->name('exams.marksheet');
     });
 
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('role:Super Admin|Admin')
+    ->group(function () {
+
+        Route::prefix('fees')->name('fees.')->group(function () {
+
+            // =========================
+            // Fee Categories
+            // =========================
+            Route::get('/categories', [FeeStructureController::class, 'categories'])
+                ->name('categories');
+
+            Route::post('/categories', [FeeStructureController::class, 'storeCategory'])
+                ->name('categories.store');
+
+            Route::delete('/categories/{category}', [FeeStructureController::class, 'deleteCategory'])
+                ->name('categories.destroy');
+
+
+            // =========================
+            // Fee Structures
+            // =========================
+            Route::get('/structures', [FeeStructureController::class, 'index'])
+                ->name('structures');
+
+            Route::post('/structures', [FeeStructureController::class, 'store'])
+                ->name('structures.store');
+
+            Route::delete('/structures/{structure}', [FeeStructureController::class, 'destroy'])
+                ->name('structures.destroy');
+
+
+            // =========================
+            // Invoices
+            // =========================
+            Route::get('/invoices', [FeeInvoiceController::class, 'index'])
+                ->name('invoices.index');
+
+            Route::get('/invoices/create', [FeeInvoiceController::class, 'create'])
+                ->name('invoices.create');
+
+            Route::post('/invoices', [FeeInvoiceController::class, 'store'])
+                ->name('invoices.store');
+
+            Route::get('/invoices/bulk', [FeeInvoiceController::class, 'bulkCreate'])
+                ->name('invoices.bulk');
+
+            Route::post('/invoices/bulk', [FeeInvoiceController::class, 'bulkStore'])
+                ->name('invoices.bulk.store');
+
+            Route::get('/invoices/{invoice}', [FeeInvoiceController::class, 'show'])
+                ->name('invoices.show');
+
+            Route::delete('/invoices/{invoice}', [FeeInvoiceController::class, 'destroy'])
+                ->name('invoices.destroy');
+
+
+            // =========================
+            // Payments
+            // =========================
+            Route::get('/payments', [FeePaymentController::class, 'index'])
+                ->name('payments.index');
+
+            Route::get('/payments/invoice/{invoice}/create', [FeePaymentController::class, 'create'])
+                ->name('payments.create');
+
+            Route::post('/payments/invoice/{invoice}', [FeePaymentController::class, 'store'])
+                ->name('payments.store');
+
+            Route::get('/payments/{payment}/receipt', [FeePaymentController::class, 'receipt'])
+                ->name('payments.receipt');
+
+            Route::delete('/payments/{payment}', [FeePaymentController::class, 'destroy'])
+                ->name('payments.destroy');
+
+
+            // =========================
+            // Reports
+            // =========================
+            Route::get('/reports/due', [FeeReportController::class, 'dueList'])
+                ->name('reports.due');
+
+            Route::get('/reports/income-expense', [FeeReportController::class, 'incomeExpense'])
+                ->name('reports.income-expense');
+
+            Route::get('/reports/student-ledger/{student}', [FeeReportController::class, 'studentLedger'])
+                ->name('reports.student-ledger');
+
+
+            // =========================
+            // Expenses
+            // =========================
+            Route::get('/expenses', [ExpenseController::class, 'index'])
+                ->name('expenses.index');
+
+            Route::post('/expenses', [ExpenseController::class, 'store'])
+                ->name('expenses.store');
+
+            Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])
+                ->name('expenses.destroy');
+        });
+    });
 
 
 

@@ -838,6 +838,29 @@ return [
         ['text' => 'নতুন পরীক্ষা', 'url' => '/admin/exams/create', 'icon' => 'fas fa-plus-circle', 'can' => 'exam-manage'],
     ],
 ],
+[
+    'text' => 'ফি ব্যবস্থাপনা',
+    'icon' => 'fas fa-money-bill-wave',
+    'can'  => 'fee-manage',
+    'submenu' => [
+        ['text' => 'ফি ক্যাটাগরি',    'url' => '/admin/fees/categories',            'icon' => 'fas fa-tags',           'can' => 'fee-manage'],
+        ['text' => 'ফি স্ট্রাকচার',    'url' => '/admin/fees/structures',            'icon' => 'fas fa-layer-group',    'can' => 'fee-manage'],
+        ['text' => 'ইনভয়েস তালিকা',   'url' => '/admin/fees/invoices',              'icon' => 'fas fa-file-invoice',   'can' => 'fee-manage'],
+        ['text' => 'একক ইনভয়েস',     'url' => '/admin/fees/invoices/create',       'icon' => 'fas fa-plus',           'can' => 'fee-manage'],
+        ['text' => 'বাল্ক ইনভয়েস',   'url' => '/admin/fees/invoices/bulk',         'icon' => 'fas fa-copy',           'can' => 'fee-manage'],
+        ['text' => 'পেমেন্ট তালিকা',   'url' => '/admin/fees/payments',              'icon' => 'fas fa-receipt',        'can' => 'fee-manage'],
+    ],
+],
+[
+    'text' => 'রিপোর্ট',
+    'icon' => 'fas fa-chart-pie',
+    'can'  => 'report-view',
+    'submenu' => [
+        ['text' => 'বকেয়া তালিকা',         'url' => '/admin/fees/reports/due',            'icon' => 'fas fa-exclamation-triangle', 'can' => 'report-view'],
+        ['text' => 'ইনকাম-এক্সপেন্স',     'url' => '/admin/fees/reports/income-expense', 'icon' => 'fas fa-balance-scale',        'can' => 'report-view'],
+        ['text' => 'খরচ ব্যবস্থাপনা',      'url' => '/admin/fees/expenses',               'icon' => 'fas fa-wallet',               'can' => 'report-view'],
+    ],
+],
 
     ['header' => 'ACCOUNT'],
 
