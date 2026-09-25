@@ -829,6 +829,15 @@ return [
         ['text' => 'শিক্ষক রিপোর্ট',       'url' => '/admin/attendance/teachers/report', 'icon' => 'fas fa-chart-line',   'can' => 'attendance-manage'],
     ],
 ],
+[
+    'text' => 'পরীক্ষা ও রেজাল্ট',
+    'icon' => 'fas fa-file-alt',
+    'can'  => 'exam-manage',
+    'submenu' => [
+        ['text' => 'সব পরীক্ষা', 'url' => '/admin/exams',        'icon' => 'fas fa-list',         'can' => 'exam-manage'],
+        ['text' => 'নতুন পরীক্ষা', 'url' => '/admin/exams/create', 'icon' => 'fas fa-plus-circle', 'can' => 'exam-manage'],
+    ],
+],
 
     ['header' => 'ACCOUNT'],
 

@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\AcademicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StudentAttendanceController;
 use App\Http\Controllers\Admin\TeacherAttendanceController;
+use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Admin\MarkController;
+use App\Http\Controllers\Admin\ResultController;
 
 
 Route::get('/', fn() => view('welcome'));
@@ -65,20 +68,86 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
 
-// ... (আগের রাউটের নিচে)
 
-Route::prefix('attendance')->name('attendance.')->group(function () {
-    // Students
-    Route::get('/students', [StudentAttendanceController::class, 'index'])->name('students.index');
-    Route::post('/students', [StudentAttendanceController::class, 'store'])->name('students.store');
-    Route::get('/students/report', [StudentAttendanceController::class, 'report'])->name('students.report');
-    Route::get('/students/{student}/report', [StudentAttendanceController::class, 'studentReport'])->name('students.student-report');
 
-    // Teachers
-    Route::get('/teachers', [TeacherAttendanceController::class, 'index'])->name('teachers.index');
-    Route::post('/teachers', [TeacherAttendanceController::class, 'store'])->name('teachers.store');
-    Route::get('/teachers/report', [TeacherAttendanceController::class, 'report'])->name('teachers.report');
-});
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('role:Super Admin|Admin')
+    ->group(function () {
+
+        // =========================
+        // Exam Management
+        // =========================
+        Route::resource('exams', ExamController::class);
+
+        // =========================
+        // Subject Management
+        // =========================
+        Route::get('/exams/{exam}/subjects', [ExamController::class, 'subjects'])
+            ->name('exams.subjects');
+
+        Route::post('/exams/{exam}/subjects', [ExamController::class, 'storeSubject'])
+            ->name('exams.subjects.store');
+
+        Route::post('/exams/{exam}/subjects/bulk', [ExamController::class, 'bulkImportSubjects'])
+            ->name('exams.subjects.bulk');
+
+        Route::delete('/exams/subjects/{examSubject}', [ExamController::class, 'deleteSubject'])
+            ->name('exams.subjects.destroy');
+
+        // =========================
+        // Mark Entry
+        // =========================
+        Route::get('/exams/{exam}/marks', [MarkController::class, 'index'])
+            ->name('exams.marks');
+
+        Route::post('/exams/{exam}/marks', [MarkController::class, 'store'])
+            ->name('exams.marks.store');
+
+        // =========================
+        // Result
+        // =========================
+        Route::get('/exams/{exam}/result', [ResultController::class, 'index'])
+            ->name('exams.result');
+
+        Route::get('/exams/{exam}/marksheet/{student}', [ResultController::class, 'marksheet'])
+            ->name('exams.marksheet');
+    });
+
+
+
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('role:Super Admin|Admin')
+    ->group(function () {
+
+        Route::prefix('attendance')->name('attendance.')->group(function () {
+
+            // Student Attendance
+            Route::get('/students', [StudentAttendanceController::class, 'index'])
+                ->name('students.index');
+
+            Route::post('/students', [StudentAttendanceController::class, 'store'])
+                ->name('students.store');
+
+            Route::get('/students/report', [StudentAttendanceController::class, 'report'])
+                ->name('students.report');
+
+            Route::get('/students/{student}/report', [StudentAttendanceController::class, 'studentReport'])
+                ->name('students.student-report');
+
+            // Teacher Attendance
+            Route::get('/teachers', [TeacherAttendanceController::class, 'index'])
+                ->name('teachers.index');
+
+            Route::post('/teachers', [TeacherAttendanceController::class, 'store'])
+                ->name('teachers.store');
+
+            Route::get('/teachers/report', [TeacherAttendanceController::class, 'report'])
+                ->name('teachers.report');
+        });
+    });
 });
 
 require __DIR__ . '/auth.php';
