@@ -16,6 +16,13 @@ use App\Http\Controllers\Admin\FeeInvoiceController;
 use App\Http\Controllers\Admin\FeePaymentController;
 use App\Http\Controllers\Admin\FeeReportController;
 use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\SmsController;
+use App\Http\Controllers\Admin\PdfController;
+use App\Http\Controllers\Admin\AnalyticsController;
+// api controller
+use App\Models\Section;
+use App\Models\Student;
+use Illuminate\Http\Request;
 
 
 Route::get('/', fn() => view('welcome'));
@@ -73,8 +80,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
 
-
-
+});
 Route::prefix('admin')
     ->name('admin.')
     ->middleware('role:Super Admin|Admin')
@@ -231,6 +237,68 @@ Route::prefix('admin')
     ->middleware('role:Super Admin|Admin')
     ->group(function () {
 
+        // =========================
+        // SMS MANAGEMENT
+        // =========================
+        Route::prefix('sms')->name('sms.')->group(function () {
+
+            Route::get('/settings', [SmsController::class, 'settings'])
+                ->name('settings');
+
+            Route::post('/settings', [SmsController::class, 'updateSettings'])
+                ->name('settings.update');
+
+            Route::get('/compose', [SmsController::class, 'compose'])
+                ->name('compose');
+
+            Route::post('/send', [SmsController::class, 'send'])
+                ->name('send');
+
+            Route::get('/logs', [SmsController::class, 'logs'])
+                ->name('logs');
+
+            Route::post('/due-reminders', [SmsController::class, 'sendDueReminders'])
+                ->name('due-reminders');
+        });
+
+
+        // =========================
+        // PDF REPORTS
+        // =========================
+        Route::prefix('pdf')->name('pdf.')->group(function () {
+
+            Route::get('/marksheet/{exam}/{student}', [PdfController::class, 'marksheet'])
+                ->name('marksheet');
+
+            Route::get('/receipt/{payment}', [PdfController::class, 'receipt'])
+                ->name('receipt');
+
+            Route::get('/result-sheet/{exam}', [PdfController::class, 'resultSheet'])
+                ->name('result-sheet');
+
+            Route::get('/due-list', [PdfController::class, 'dueList'])
+                ->name('due-list');
+
+            Route::get('/attendance-report', [PdfController::class, 'attendanceReport'])
+                ->name('attendance-report');
+        });
+
+
+
+
+        Route::get('/analytics/dashboard', [AnalyticsController::class, 'dashboardData'])
+            ->name('analytics.dashboard');
+
+
+
+
+
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('role:Super Admin|Admin')
+    ->group(function () {
+
         Route::prefix('attendance')->name('attendance.')->group(function () {
 
             // Student Attendance
@@ -258,5 +326,33 @@ Route::prefix('admin')
         });
     });
 });
+
+// API Routes for dynamic data fetching
+
+Route::get('/api/sections', function (Request $request) {
+    return Section::query()
+        ->where('class_id', $request->class_id)
+        ->where('is_active', true)
+        ->orderBy('name')
+        ->get(['id', 'name']);
+})->name('api.sections');
+
+
+Route::get('/api/students', function (Request $request) {
+    return Student::query()
+        ->where('class_id', $request->class_id)
+        ->when(
+            $request->filled('section_id'),
+            fn ($query) => $query->where('section_id', $request->section_id)
+        )
+        ->where('status', 'active')
+        ->orderBy('roll_number')
+        ->get([
+            'id',
+            'name',
+            'roll_number',
+            'student_id'
+        ]);
+})->name('api.students');
 
 require __DIR__ . '/auth.php';

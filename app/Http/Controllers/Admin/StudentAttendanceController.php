@@ -90,6 +90,14 @@ class StudentAttendanceController extends Controller
             }
 
             DB::commit();
+            // SMS নোটিফিকেশন
+            $smsService = app(\App\Services\SmsService::class);
+            foreach ($validated['statuses'] as $studentId => $status) {
+                $student = Student::find($studentId);
+                if ($student && $student->father_phone || $student->guardian_phone) {
+                    $smsService->sendAttendanceSms($student, $status, $validated['attendance_date']);
+                }
+            }
 
             $msg = sprintf(
                 'হাজিরা সংরক্ষণ হয়েছে — উপস্থিত: %d, অনুপস্থিত: %d, বিলম্ব: %d, ছুটি: %d',

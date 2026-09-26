@@ -3,6 +3,9 @@
 
 @section('page-actions')
     <button onclick="window.print()" class="btn btn-info btn-sm"><i class="fas fa-print"></i> প্রিন্ট</button>
+    <a href="{{ route('admin.pdf.due-list', request()->query()) }}" class="btn btn-danger btn-sm">
+    <i class="fas fa-file-pdf"></i> PDF
+</a>
 @endsection
 
 @section('content')

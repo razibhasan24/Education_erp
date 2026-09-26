@@ -861,6 +861,16 @@ return [
         ['text' => 'খরচ ব্যবস্থাপনা',      'url' => '/admin/fees/expenses',               'icon' => 'fas fa-wallet',               'can' => 'report-view'],
     ],
 ],
+[
+    'text' => 'SMS ব্যবস্থাপনা',
+    'icon' => 'fas fa-sms',
+    'can'  => 'sms-send',
+    'submenu' => [
+        ['text' => 'SMS সেটিংস',  'url' => '/admin/sms/settings', 'icon' => 'fas fa-cog',      'can' => 'sms-send'],
+        ['text' => 'SMS পাঠান',    'url' => '/admin/sms/compose',  'icon' => 'fas fa-paper-plane', 'can' => 'sms-send'],
+        ['text' => 'SMS লগ',      'url' => '/admin/sms/logs',     'icon' => 'fas fa-list',      'can' => 'sms-send'],
+    ],
+],
 
     ['header' => 'ACCOUNT'],
 

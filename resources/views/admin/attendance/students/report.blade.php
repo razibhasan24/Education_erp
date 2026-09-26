@@ -61,6 +61,9 @@
         <div class="card-tools">
             <button onclick="window.print()" class="btn btn-xs btn-light"><i class="fas fa-print"></i> প্রিন্ট</button>
         </div>
+        <a href="{{ route('admin.pdf.attendance-report', request()->query()) }}" class="btn btn-danger btn-sm">
+    <i class="fas fa-file-pdf"></i> PDF
+</a>
     </div>
     <div class="card-body table-responsive">
         <table class="table table-bordered table-hover datatable">

@@ -5,6 +5,12 @@
 @section('page-actions')
     <a href="{{ route('admin.exams.index') }}" class="btn btn-secondary btn-sm">ফিরে যান</a>
     <button onclick="window.print()" class="btn btn-info btn-sm"><i class="fas fa-print"></i> প্রিন্ট</button>
+    @if(request('class_id'))
+    <a href="{{ route('admin.pdf.result-sheet', [$exam, 'class_id' => request('class_id'), 'section_id' => request('section_id')]) }}"
+       class="btn btn-danger btn-sm">
+        <i class="fas fa-file-pdf"></i> রেজাল্ট শীট PDF
+    </a>
+@endif
 @endsection
 
 @section('content')

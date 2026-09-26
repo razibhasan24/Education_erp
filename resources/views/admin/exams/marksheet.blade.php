@@ -28,6 +28,9 @@
         <i class="fas fa-arrow-left"></i> ফিরে যান
     </a>
     <button onclick="window.print()" class="btn btn-primary"><i class="fas fa-print"></i> প্রিন্ট</button>
+    <a href="{{ route('admin.pdf.marksheet', [$exam, $student]) }}" class="btn btn-danger">
+    <i class="fas fa-file-pdf"></i> PDF ডাউনলোড
+</a>
 </div>
 
 <div class="marksheet">
