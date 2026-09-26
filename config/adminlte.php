@@ -871,6 +871,23 @@ return [
         ['text' => 'SMS লগ',      'url' => '/admin/sms/logs',     'icon' => 'fas fa-list',      'can' => 'sms-send'],
     ],
 ],
+[
+    'text' => 'অভিভাবক',
+    'icon' => 'fas fa-user-friends',
+    'can'  => 'student-manage',
+    'submenu' => [
+        ['text' => 'সব অভিভাবক', 'url' => '/admin/guardians',        'icon' => 'fas fa-list', 'can' => 'student-manage'],
+        ['text' => 'নতুন অভিভাবক', 'url' => '/admin/guardians/create', 'icon' => 'fas fa-plus', 'can' => 'student-manage'],
+    ],
+],
+[
+    'text' => 'রিপোর্ট কার্ড',
+    'icon' => 'fas fa-file-pdf',
+    'can'  => 'result-manage',
+    'submenu' => [
+        ['text' => 'রিপোর্ট কার্ড জেনারেট', 'url' => '/admin/report-cards', 'icon' => 'fas fa-download', 'can' => 'result-manage'],
+    ],
+],
 
     ['header' => 'ACCOUNT'],
 

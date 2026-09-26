@@ -49,8 +49,11 @@ class RolePermissionSeeder extends Seeder
 
         // Accountant পারমিশন
         Role::findByName('Accountant')->syncPermissions(['fee-manage', 'report-view']);
-
-        // সিস্টেমের প্রথম Super Admin ইউজার
+        // Student role কে Student Portal access
+        // Guardian role কে Guardian Portal access
+        Role::findByName('Guardian')->syncPermissions(['report-view']);
+        Role::findByName('Student')->syncPermissions(['report-view']);
+         // সিস্টেমের প্রথম Super Admin ইউজার
         $admin = User::firstOrCreate(
             ['email' => 'admin@usms.test'],
             [

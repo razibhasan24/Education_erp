@@ -43,4 +43,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Teacher::class);
     }
+    public function guardian()
+    {
+        return $this->hasOne(\App\Models\Guardian::class);
+    }
 }
