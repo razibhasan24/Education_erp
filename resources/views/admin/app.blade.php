@@ -40,10 +40,10 @@
                     <span class="dropdown-item text-center text-muted">কোনো নতুন নোটিফিকেশন নেই</span>
                 @endforelse
 
-                <div class="dropdown-divider"></div>
+                {{-- <div class="dropdown-divider"></div>
                 <a href="{{ route('admin.notifications.index') }}" class="dropdown-item dropdown-footer">
                     সব নোটিফিকেশন দেখুন
-                </a>
+                </a> --}}
             </div>
         </li>
     @endauth

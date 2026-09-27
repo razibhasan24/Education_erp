@@ -12,4 +12,9 @@ class Expense extends Model
     ];
 
     protected $casts = ['expense_date' => 'date'];
+
+    public function journalEntry()
+    {
+        return $this->morphOne(\App\Models\JournalEntry::class, 'source');
+    }
 }

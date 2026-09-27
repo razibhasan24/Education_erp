@@ -28,6 +28,10 @@ class FeePayment extends Model
     {
         return $this->belongsTo(User::class, 'received_by');
     }
+    public function journalEntry()
+    {
+        return $this->morphOne(\App\Models\JournalEntry::class, 'source');
+    }
 
     public static function generateReceiptNo(): string
     {

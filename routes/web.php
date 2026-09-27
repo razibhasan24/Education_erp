@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\HostelController;
 use App\Http\Controllers\Admin\PayrollController;
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Teacher\TeacherPortalController;
+use App\Http\Controllers\Admin\AccountingController;
 
 
 
@@ -76,6 +77,64 @@ Route::prefix('payment')->name('payment.')->group(function () {
     Route::post('/ipn', [PaymentController::class, 'ipn'])->name('ipn');
 });
 
+
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'verified', 'role:Super Admin|Admin'])
+    ->group(function () {
+
+        Route::prefix('accounting')
+            ->name('accounting.')
+            ->group(function () {
+
+                // Chart of Accounts
+                Route::get('/chart-of-accounts', [AccountingController::class, 'chartOfAccounts'])
+                    ->name('chart-of-accounts');
+
+                Route::post('/chart-of-accounts', [AccountingController::class, 'storeAccount'])
+                    ->name('accounts.store');
+
+                Route::put('/chart-of-accounts/{account}', [AccountingController::class, 'updateAccount'])
+                    ->name('accounts.update');
+
+                Route::delete('/chart-of-accounts/{account}', [AccountingController::class, 'deleteAccount'])
+                    ->name('accounts.destroy');
+
+                // Journal Entries
+                Route::get('/journal-entries', [AccountingController::class, 'journalEntries'])
+                    ->name('journal-entries');
+
+                Route::get('/journal-entries/create', [AccountingController::class, 'createJournalEntry'])
+                    ->name('journal-entries.create');
+
+                Route::post('/journal-entries', [AccountingController::class, 'storeJournalEntry'])
+                    ->name('journal-entries.store');
+
+                Route::get('/journal-entries/{entry}', [AccountingController::class, 'showJournalEntry'])
+                    ->name('journal-entries.show');
+
+                Route::delete('/journal-entries/{entry}', [AccountingController::class, 'cancelJournalEntry'])
+                    ->name('journal-entries.cancel');
+
+                // Reports
+                Route::get('/ledger', [AccountingController::class, 'ledger'])
+                    ->name('ledger');
+
+                Route::get('/trial-balance', [AccountingController::class, 'trialBalance'])
+                    ->name('trial-balance');
+
+                Route::get('/profit-loss', [AccountingController::class, 'profitAndLoss'])
+                    ->name('profit-loss');
+
+                Route::get('/balance-sheet', [AccountingController::class, 'balanceSheet'])
+                    ->name('balance-sheet');
+
+                // Sync
+                Route::post('/sync-old-records', [AccountingController::class, 'syncOldRecords'])
+                    ->name('sync-old-records');
+            });
+    });
 
 /*
 |--------------------------------------------------------------------------

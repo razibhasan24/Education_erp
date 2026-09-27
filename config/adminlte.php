@@ -941,6 +941,20 @@ return [
     ],
 ],
 
+[
+    'text' => 'অ্যাকাউন্টিং',
+    'icon' => 'fas fa-calculator',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'Chart of Accounts', 'url' => 'admin/accounting/chart-of-accounts', 'icon' => 'fas fa-sitemap', 'can' => 'institute-settings'],
+        ['text' => 'Journal Entries',   'url' => 'admin/accounting/journal-entries',   'icon' => 'fas fa-book',    'can' => 'institute-settings'],
+        ['text' => 'Ledger',            'url' => 'admin/accounting/ledger',            'icon' => 'fas fa-list',    'can' => 'institute-settings'],
+        ['text' => 'Trial Balance',     'url' => 'admin/accounting/trial-balance',     'icon' => 'fas fa-balance-scale', 'can' => 'institute-settings'],
+        ['text' => 'Profit & Loss',     'url' => 'admin/accounting/profit-loss',       'icon' => 'fas fa-chart-line',    'can' => 'institute-settings'],
+        ['text' => 'Balance Sheet',     'url' => 'admin/accounting/balance-sheet',     'icon' => 'fas fa-file-invoice-dollar', 'can' => 'institute-settings'],
+    ],
+],
+
 
     ['header' => 'ACCOUNT'],
 

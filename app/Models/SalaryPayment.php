@@ -18,6 +18,10 @@ class SalaryPayment extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+    public function journalEntry()
+    {
+        return $this->morphOne(\App\Models\JournalEntry::class, 'source');
+    }
 
     public static function generateVoucherNo(): string
     {
