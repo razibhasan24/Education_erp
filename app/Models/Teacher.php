@@ -23,6 +23,11 @@ class Teacher extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // app/Models/SalaryPayment.php এ যোগ করুন
+    public function paidBy()
+    {
+        return $this->belongsTo(User::class, 'paid_by');
+    }
 
     public static function boot()
     {

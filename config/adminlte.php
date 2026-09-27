@@ -889,6 +889,59 @@ return [
     ],
 ],
 
+// ===== Library =====
+[
+    'text' => 'লাইব্রেরি',
+    'icon' => 'fas fa-book-reader',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'ক্যাটাগরি',       'url' => 'admin/library/categories', 'icon' => 'fas fa-tags',         'can' => 'institute-settings'],
+        ['text' => 'বই তালিকা',       'url' => 'admin/library/books',      'icon' => 'fas fa-book',         'can' => 'institute-settings'],
+        ['text' => 'ইস্যু / রিটার্ন', 'url' => 'admin/library/issues',     'icon' => 'fas fa-exchange-alt', 'can' => 'institute-settings'],
+    ],
+],
+
+// ===== Transport =====
+[
+    'text' => 'ট্রান্সপোর্ট',
+    'icon' => 'fas fa-bus',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'যানবাহন ও রুট', 'url' => 'admin/transport', 'icon' => 'fas fa-list', 'can' => 'institute-settings'],
+    ],
+],
+
+// ===== Hostel =====
+[
+    'text' => 'হোস্টেল',
+    'icon' => 'fas fa-hotel',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'হোস্টেল ব্যবস্থাপনা', 'url' => 'admin/hostel', 'icon' => 'fas fa-door-open', 'can' => 'institute-settings'],
+    ],
+],
+
+// ===== Payroll =====
+[
+    'text' => 'পে-রোল',
+    'icon' => 'fas fa-money-check-alt',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'বেতন ব্যবস্থাপনা', 'url' => 'admin/payroll', 'icon' => 'fas fa-money-bill-wave', 'can' => 'institute-settings'],
+    ],
+],
+
+// ===== Backup =====
+[
+    'text' => 'ডেটাবেস ব্যাকআপ',
+    'icon' => 'fas fa-database',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'ব্যাকআপ', 'url' => 'admin/backup', 'icon' => 'fas fa-download', 'can' => 'institute-settings'],
+    ],
+],
+
+
     ['header' => 'ACCOUNT'],
 
     [

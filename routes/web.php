@@ -36,6 +36,16 @@ use App\Http\Controllers\Guardian\GuardianPortalController;
 use App\Models\Section;
 use App\Models\Student;
 
+use App\Http\Controllers\Admin\LibraryController;
+use App\Http\Controllers\Admin\TransportController;
+use App\Http\Controllers\Admin\HostelController;
+use App\Http\Controllers\Admin\PayrollController;
+use App\Http\Controllers\Admin\BackupController;
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -261,6 +271,91 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('guardian-portal')->name('guardian.')->middleware('role:Guardian')->group(function () {
         Route::get('/dashboard', [GuardianPortalController::class, 'dashboard'])->name('dashboard');
         Route::get('/child/{student}', [GuardianPortalController::class, 'childOverview'])->name('child');
+    });
+
+ Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('role:Super Admin|Admin')
+    ->group(function () {
+
+        // Library
+        Route::prefix('library')->name('library.')->group(function () {
+            Route::get('/categories', [LibraryController::class, 'categories'])
+                ->name('categories');
+
+            Route::post('/categories', [LibraryController::class, 'storeCategory'])
+                ->name('categories.store');
+
+            Route::delete('/categories/{category}', [LibraryController::class, 'deleteCategory'])
+                ->name('categories.destroy');
+
+            Route::get('/books', [LibraryController::class, 'books'])
+                ->name('books');
+
+            Route::post('/books', [LibraryController::class, 'storeBook'])
+                ->name('books.store');
+
+            Route::put('/books/{book}', [LibraryController::class, 'updateBook'])
+                ->name('books.update');
+
+            Route::delete('/books/{book}', [LibraryController::class, 'deleteBook'])
+                ->name('books.destroy');
+
+            Route::get('/issues', [LibraryController::class, 'issues'])
+                ->name('issues');
+
+            Route::post('/issues', [LibraryController::class, 'storeIssue'])
+                ->name('issues.store');
+
+            Route::post('/issues/{issue}/return', [LibraryController::class, 'returnBook'])
+                ->name('issues.return');
+        });
+
+
+        // Transport
+        Route::prefix('transport')->name('transport.')->group(function () {
+            Route::get('/', [TransportController::class, 'index'])->name('index');
+            Route::post('/vehicles', [TransportController::class, 'storeVehicle'])->name('vehicles.store');
+            Route::delete('/vehicles/{vehicle}', [TransportController::class, 'deleteVehicle'])->name('vehicles.destroy');
+            Route::post('/routes', [TransportController::class, 'storeRoute'])->name('routes.store');
+            Route::delete('/routes/{route}', [TransportController::class, 'deleteRoute'])->name('routes.destroy');
+            Route::post('/routes/{route}/stops', [TransportController::class, 'storeStop'])->name('stops.store');
+            Route::post('/assign', [TransportController::class, 'assignStudent'])->name('assign');
+            Route::delete('/assign/{assignment}', [TransportController::class, 'removeAssignment'])->name('assign.remove');
+        });
+
+
+        // Hostel
+        Route::prefix('hostel')->name('hostel.')->group(function () {
+            Route::get('/', [HostelController::class, 'index'])->name('index');
+            Route::post('/hostels', [HostelController::class, 'storeHostel'])->name('hostels.store');
+            Route::delete('/hostels/{hostel}', [HostelController::class, 'deleteHostel'])->name('hostels.destroy');
+            Route::post('/hostels/{hostel}/rooms', [HostelController::class, 'storeRoom'])->name('rooms.store');
+            Route::delete('/rooms/{room}', [HostelController::class, 'deleteRoom'])->name('rooms.destroy');
+            Route::post('/allocate', [HostelController::class, 'allocate'])->name('allocate');
+            Route::delete('/allocate/{allocation}', [HostelController::class, 'release'])->name('allocate.release');
+        });
+
+
+        // Payroll
+        Route::prefix('payroll')->name('payroll.')->group(function () {
+            Route::get('/', [PayrollController::class, 'index'])->name('index');
+            Route::post('/', [PayrollController::class, 'store'])->name('store');
+            Route::post('/bulk', [PayrollController::class, 'bulkStore'])->name('bulk');
+            Route::get('/{payment}/payslip', [PayrollController::class, 'payslip'])->name('payslip');
+            Route::delete('/{payment}', [PayrollController::class, 'destroy'])->name('destroy');
+        });
+
+
+        // Backup
+        Route::prefix('backup')->name('backup.')->group(function () {
+            Route::get('/', [BackupController::class, 'index'])->name('index');
+            Route::post('/create', [BackupController::class, 'create'])->name('create');
+            Route::get('/download/{filename}', [BackupController::class, 'download'])->name('download');
+            Route::delete('/{filename}', [BackupController::class, 'destroy'])->name('destroy');
+            Route::post('/restore', [BackupController::class, 'restore'])->name('restore');
+        });
+
     });
 
 });
