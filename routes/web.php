@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 
 // ===== Controllers =====
@@ -41,19 +42,26 @@ use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\HostelController;
 use App\Http\Controllers\Admin\PayrollController;
 use App\Http\Controllers\Admin\BackupController;
+use App\Http\Controllers\Teacher\TeacherPortalController;
 
 
 
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Public Routes
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\FrontendController;
 
-Route::get('/', fn() => view('welcome'))->name('home');
+Route::name('frontend.')->group(function () {
+    Route::get('/', [FrontendController::class, 'home'])->name('home');
+    Route::get('/about', [FrontendController::class, 'about'])->name('about');
+    Route::get('/notices', [FrontendController::class, 'notices'])->name('notices');
+    Route::get('/notices/{notice}', [FrontendController::class, 'noticeShow'])->name('notice.show');
+    Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+    Route::post('/contact', [FrontendController::class, 'contactSubmit'])->name('contact.submit');
+    Route::get('/online-admission', [FrontendController::class, 'admission'])->name('admission');
+    Route::post('/online-admission', [FrontendController::class, 'admissionSubmit'])->name('admission.submit');
+    Route::get('/admission-success/{studentId}', [FrontendController::class, 'admissionSuccess'])->name('admission.success');
+});
 
 
 /*
@@ -358,6 +366,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     });
 
+
+
+Route::prefix('teacher')
+    ->name('teacher.')
+    ->middleware(['auth', 'verified', 'role:Teacher'])
+    ->group(function () {
+
+        Route::get('/dashboard', [TeacherPortalController::class, 'dashboard'])
+            ->name('dashboard');
+
+        Route::get('/attendance', [TeacherPortalController::class, 'attendance'])
+            ->name('attendance');
+
+        Route::post('/attendance', [TeacherPortalController::class, 'storeAttendance'])
+            ->name('attendance.store');
+
+        Route::get('/marks', [TeacherPortalController::class, 'marks'])
+            ->name('marks');
+
+        Route::post('/marks', [TeacherPortalController::class, 'storeMarks'])
+            ->name('marks.store');
+
+    });
+
 });
 
 
@@ -389,5 +421,17 @@ Route::middleware('auth')->prefix('api')->name('api.')->group(function () {
     })->name('students');
 });
 
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Console Routes
+|--------------------------------------------------------------------------
+*/
+
+Artisan::command('inspire', function () {
+    $this->comment('আপনি অসাধারণ একটি সিস্টেম বানাচ্ছেন! 🚀');
+})->purpose('Display an inspiring quote');
 
 require __DIR__ . '/auth.php';

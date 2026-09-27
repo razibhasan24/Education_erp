@@ -8,7 +8,46 @@
         @yield('page-actions')
     </div>
 @stop
+@section('content_top_nav_right')
+    @auth
+        @php
+            $unreadNotifications = auth()->user()->unreadNotifications->take(5);
+            $unreadCount = auth()->user()->unreadNotifications->count();
+        @endphp
 
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-toggle="dropdown">
+                <i class="far fa-bell"></i>
+                @if($unreadCount > 0)
+                    <span class="badge badge-warning navbar-badge">{{ $unreadCount }}</span>
+                @endif
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" aria-labelledby="notifDropdown">
+                <span class="dropdown-item dropdown-header">{{ $unreadCount }}টি নতুন নোটিফিকেশন</span>
+
+                @forelse($unreadNotifications as $notif)
+                    <a href="{{ $notif->url ?? '#' }}" class="dropdown-item">
+                        <div class="media">
+                            <i class="{{ $notif->icon }} mr-2 text-{{ $notif->color }}"></i>
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">{{ $notif->title }}</h3>
+                                <p class="text-sm mb-0">{{ Str::limit($notif->message, 40) }}</p>
+                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> {{ $notif->time_ago }}</p>
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                    <span class="dropdown-item text-center text-muted">কোনো নতুন নোটিফিকেশন নেই</span>
+                @endforelse
+
+                <div class="dropdown-divider"></div>
+                <a href="{{ route('admin.notifications.index') }}" class="dropdown-item dropdown-footer">
+                    সব নোটিফিকেশন দেখুন
+                </a>
+            </div>
+        </li>
+    @endauth
+@stop
 @section('content')
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show">
