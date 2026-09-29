@@ -197,5 +197,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('session:prune')
             ->daily()
             ->name('prune-sessions');
+
+
+            // প্রতিদিন রাত 1টায় late fee আপডেট
+            $schedule->call(function () {
+                app(\App\Services\LateFeeService::class)->updateAllInvoices();
+                app(\App\Services\LateFeeService::class)->updateAllInstallments();
+            })
+                ->dailyAt('01:00')
+                ->name('update-late-fees')
+                ->withoutOverlapping();
     })
     ->create();

@@ -361,17 +361,23 @@ class AccountingService
         ];
     }
 
-    /**
+       /**
      * Balance Sheet
      */
     public function balanceSheet(?string $asOf = null): array
     {
         $asOf = $asOf ?? now()->toDateString();
 
-        $getBalance = function ($type) use ($asOf) {
-            return Account::active()->ofType($type)->byCode()->get()->map(function ($acc) use ($asOf) {
-                $debit = $acc->items()->whereHas('entry', fn($q) => $q->posted()->where('entry_date', '<=', $asOf))->sum('debit');
-                $credit = $acc->items()->whereHas('entry', fn($q) => $q->posted()->where('entry_date', '<=', $asOf))->sum('credit');
+        // Helper: একটি নির্দিষ্ট account type এর সব account এর balance
+        $getBalance = function (string $type) use ($asOf) {
+            return Account::active()->ofType($type)->byCode()->get()->map(function ($acc) use ($asOf, $type) {
+                $debit = $acc->items()
+                    ->whereHas('entry', fn($q) => $q->posted()->where('entry_date', '<=', $asOf))
+                    ->sum('debit');
+                $credit = $acc->items()
+                    ->whereHas('entry', fn($q) => $q->posted()->where('entry_date', '<=', $asOf))
+                    ->sum('credit');
+
                 $openingDebit = $acc->opening_type === 'debit' ? $acc->opening_balance : 0;
                 $openingCredit = $acc->opening_type === 'credit' ? $acc->opening_balance : 0;
 
@@ -381,8 +387,8 @@ class AccountingService
                     $balance = ($credit + $openingCredit) - ($debit + $openingDebit);
                 }
 
-                return ['account' => $acc, 'amount' => $balance];
-            })->filter(fn($i) => abs($i['amount']) > 0);
+                return ['account' => $acc, 'amount' => (float) $balance];
+            })->filter(fn($i) => abs($i['amount']) > 0.01)->values();
         };
 
         $assets = $getBalance('asset');

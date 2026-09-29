@@ -849,6 +849,16 @@ return [
         ['text' => 'একক ইনভয়েস',     'url' => '/admin/fees/invoices/create',       'icon' => 'fas fa-plus',           'can' => 'fee-manage'],
         ['text' => 'বাল্ক ইনভয়েস',   'url' => '/admin/fees/invoices/bulk',         'icon' => 'fas fa-copy',           'can' => 'fee-manage'],
         ['text' => 'পেমেন্ট তালিকা',   'url' => '/admin/fees/payments',              'icon' => 'fas fa-receipt',        'can' => 'fee-manage'],
+        ['text' => 'Refund তালিকা',  'url' => 'admin/fees/refunds',    'icon' => 'fas fa-undo', 'can' => 'fee-manage'],
+    ],
+],
+[
+    'text' => 'বৃত্তি',
+    'icon' => 'fas fa-award',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'বৃত্তির তালিকা',  'url' => 'admin/scholarships',              'icon' => 'fas fa-list',      'can' => 'institute-settings'],
+        ['text' => 'আবেদন',            'url' => 'admin/scholarships/applications', 'icon' => 'fas fa-file-alt',  'can' => 'institute-settings'],
     ],
 ],
 [
@@ -954,6 +964,240 @@ return [
         ['text' => 'Balance Sheet',     'url' => 'admin/accounting/balance-sheet',     'icon' => 'fas fa-file-invoice-dollar', 'can' => 'institute-settings'],
     ],
 ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | FINANCIAL MODULES
+        |--------------------------------------------------------------------------
+        */
+        ['header' => 'আর্থিক মডিউল'],
+
+        // ===== 1. ব্যাংক Reconciliation =====
+        [
+            'text' => 'ব্যাংক Reconciliation',
+            'icon' => 'fas fa-university',
+            'can'  => 'institute-settings',
+            'submenu' => [
+                [
+                    'text' => 'ব্যাংক অ্যাকাউন্ট',
+                    'url'  => 'admin/accounting/banks',
+                    'icon' => 'fas fa-list',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'Statement Import',
+                    'url'  => 'admin/accounting/banks',
+                    'icon' => 'fas fa-file-upload',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'Match Status',
+                    'url'  => 'admin/accounting/banks',
+                    'icon' => 'fas fa-link',
+                    'can'  => 'institute-settings',
+                ],
+            ],
+        ],
+
+        // ===== 2. Mobile Banking Reconciliation =====
+        [
+            'text' => 'মোবাইল ব্যাংকিং',
+            'icon' => 'fas fa-mobile-alt',
+            'can'  => 'institute-settings',
+            'submenu' => [
+                [
+                    'text' => 'বিকাশ অ্যাকাউন্ট',
+                    'url'  => 'admin/accounting/banks?type=bkash',
+                    'icon' => 'fas fa-wallet',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'নগদ অ্যাকাউন্ট',
+                    'url'  => 'admin/accounting/banks?type=nagad',
+                    'icon' => 'fas fa-money-bill-wave',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'রকেট / উপায়',
+                    'url'  => 'admin/accounting/banks?type=rocket',
+                    'icon' => 'fas fa-mobile',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'সব মোবাইল Trx',
+                    'url'  => 'admin/accounting/banks',
+                    'icon' => 'fas fa-exchange-alt',
+                    'can'  => 'institute-settings',
+                ],
+            ],
+        ],
+
+        // ===== 3. বৃত্তি ও ডিসকাউন্ট =====
+        [
+            'text' => 'বৃত্তি ও ডিসকাউন্ট',
+            'icon' => 'fas fa-award',
+            'can'  => 'student-manage',
+            'submenu' => [
+                [
+                    'text' => 'বৃত্তির তালিকা',
+                    'url'  => 'admin/scholarships',
+                    'icon' => 'fas fa-list-alt',
+                    'can'  => 'student-manage',
+                ],
+                [
+                    'text' => 'নতুন বৃত্তি',
+                    'url'  => 'admin/scholarships#add',
+                    'icon' => 'fas fa-plus-circle',
+                    'can'  => 'student-manage',
+                ],
+                [
+                    'text' => 'আবেদন তালিকা',
+                    'url'  => 'admin/scholarships/applications',
+                    'icon' => 'fas fa-file-signature',
+                    'can'  => 'student-manage',
+                ],
+                [
+                    'text' => 'বাল্ক আবেদন',
+                    'url'  => 'admin/scholarships/applications#bulk',
+                    'icon' => 'fas fa-copy',
+                    'can'  => 'student-manage',
+                ],
+                [
+                    'text' => 'ডিসকাউন্ট নিয়ম',
+                    'url'  => 'admin/scholarships',
+                    'icon' => 'fas fa-percent',
+                    'can'  => 'student-manage',
+                ],
+            ],
+        ],
+
+        // ===== 4. কিস্তি প্ল্যান (Installment) =====
+        [
+            'text' => 'কিস্তি প্ল্যান',
+            'icon' => 'fas fa-calendar-alt',
+            'can'  => 'fee-manage',
+            'submenu' => [
+                [
+                    'text' => 'সব ইনভয়েস',
+                    'url'  => 'admin/fees/invoices',
+                    'icon' => 'fas fa-file-invoice',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'কিস্তি তৈরি',
+                    'url'  => 'admin/fees/invoices?installment=none',
+                    'icon' => 'fas fa-plus-square',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'Late Fee আপডেট',
+                    'url'  => 'admin/fees/installments/update-late-fees',
+                    'icon' => 'fas fa-sync-alt',
+                    'can'  => 'fee-manage',
+                ],
+            ],
+        ],
+
+        // ===== 5. Late Fee Auto Calculate =====
+        [
+            'text' => 'Late Fee (জরিমানা)',
+            'icon' => 'fas fa-exclamation-triangle',
+            'can'  => 'fee-manage',
+            'submenu' => [
+                [
+                    'text' => 'Late Fee সেটিংস',
+                    'url'  => 'admin/fees/late-fee-settings',
+                    'icon' => 'fas fa-cog',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'Overdue ইনভয়েস',
+                    'url'  => 'admin/fees/invoices?overdue=1',
+                    'icon' => 'fas fa-clock',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'Overdue কিস্তি',
+                    'url'  => 'admin/fees/installments?status=overdue',
+                    'icon' => 'fas fa-hourglass-half',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'Manual Update',
+                    'url'  => 'admin/fees/installments/update-late-fees',
+                    'icon' => 'fas fa-sync',
+                    'can'  => 'fee-manage',
+                ],
+            ],
+        ],
+
+        // ===== 6. Refund Management =====
+        [
+            'text' => 'ফি ফেরত (Refund)',
+            'icon' => 'fas fa-undo-alt',
+            'can'  => 'fee-manage',
+            'submenu' => [
+                [
+                    'text' => 'সব Refund',
+                    'url'  => 'admin/fees/refunds',
+                    'icon' => 'fas fa-list',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'নতুন Refund',
+                    'url'  => 'admin/fees/refunds/create',
+                    'icon' => 'fas fa-plus',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'Pending Refund',
+                    'url'  => 'admin/fees/refunds?status=pending',
+                    'icon' => 'fas fa-clock',
+                    'can'  => 'fee-manage',
+                    'label' => 'Pending',
+                    'label_color' => 'warning',
+                ],
+                [
+                    'text' => 'Approved Refund',
+                    'url'  => 'admin/fees/refunds?status=approved',
+                    'icon' => 'fas fa-check-circle',
+                    'can'  => 'fee-manage',
+                ],
+                [
+                    'text' => 'Paid Refund',
+                    'url'  => 'admin/fees/refunds?status=paid',
+                    'icon' => 'fas fa-money-bill-wave',
+                    'can'  => 'fee-manage',
+                ],
+            ],
+        ],
+
+        // ===== 7. Annual Budget =====
+        [
+            'text' => 'বার্ষিক বাজেট',
+            'icon' => 'fas fa-chart-pie',
+            'can'  => 'institute-settings',
+            'submenu' => [
+                [
+                    'text' => 'বাজেট তালিকা',
+                    'url'  => 'admin/accounting/budgets',
+                    'icon' => 'fas fa-list-ol',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'নতুন বাজেট',
+                    'url'  => 'admin/accounting/budgets#add',
+                    'icon' => 'fas fa-plus-circle',
+                    'can'  => 'institute-settings',
+                ],
+                [
+                    'text' => 'বাজেট vs প্রকৃত',
+                    'url'  => 'admin/accounting/budgets',
+                    'icon' => 'fas fa-balance-scale',
+                    'can'  => 'institute-settings',
+                ],
+            ],
+        ],
 
 
     ['header' => 'ACCOUNT'],

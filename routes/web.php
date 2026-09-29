@@ -44,9 +44,11 @@ use App\Http\Controllers\Admin\PayrollController;
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Teacher\TeacherPortalController;
 use App\Http\Controllers\Admin\AccountingController;
-
-
-
+use App\Http\Controllers\Admin\BankReconciliationController;
+use App\Http\Controllers\Admin\ScholarshipController;
+use App\Http\Controllers\Admin\InstallmentController;
+use App\Http\Controllers\Admin\RefundController;
+use App\Http\Controllers\Admin\BudgetController;
 
 
 
@@ -65,6 +67,22 @@ Route::name('frontend.')->group(function () {
 });
 
 
+//api route
+
+Route::get('/admin/api/student-payments', function (\Illuminate\Http\Request $request) {
+    return \App\Models\FeePayment::where('student_id', $request->student_id)
+        ->latest()
+        ->get(['id', 'receipt_no', 'amount', 'payment_date'])
+        ->map(fn($p) => [
+            'id' => $p->id,
+            'receipt_no' => $p->receipt_no,
+            'amount' => (float) $p->amount,
+            'payment_date' => $p->payment_date->format('d M, Y'),
+        ]);
+})->middleware(['auth', 'role:Super Admin|Admin']);
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Payment Gateway Callback Routes (Public — SSLCommerz থেকে কল হয়)
@@ -77,6 +95,146 @@ Route::prefix('payment')->name('payment.')->group(function () {
     Route::post('/ipn', [PaymentController::class, 'ipn'])->name('ipn');
 });
 
+
+
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'verified', 'role:Super Admin|Admin'])
+    ->group(function () {
+
+        // =========================
+        // Accounting Budgets
+        // =========================
+        Route::prefix('accounting/budgets')
+            ->name('accounting.budgets.')
+            ->group(function () {
+                Route::get('/', [BudgetController::class, 'index'])->name('index');
+                Route::post('/', [BudgetController::class, 'store'])->name('store');
+                Route::put('/{budget}', [BudgetController::class, 'update'])->name('update');
+                Route::delete('/{budget}', [BudgetController::class, 'destroy'])->name('destroy');
+            });
+
+        // =========================
+        // Fee Refunds
+        // =========================
+        Route::prefix('fees/refunds')
+            ->name('fees.refunds.')
+            ->group(function () {
+                Route::get('/', [RefundController::class, 'index'])->name('index');
+                Route::get('/create', [RefundController::class, 'create'])->name('create');
+                Route::post('/', [RefundController::class, 'store'])->name('store');
+                Route::get('/{refund}', [RefundController::class, 'show'])->name('show');
+                Route::post('/{refund}/approve', [RefundController::class, 'approve'])->name('approve');
+                Route::post('/{refund}/reject', [RefundController::class, 'reject'])->name('reject');
+                Route::post('/{refund}/mark-paid', [RefundController::class, 'markPaid'])->name('mark-paid');
+                Route::delete('/{refund}', [RefundController::class, 'destroy'])->name('destroy');
+            });
+
+        // =========================
+        // Fee Installments
+        // =========================
+        Route::prefix('fees/installments')
+            ->name('fees.installments.')
+            ->group(function () {
+                Route::get('/invoice/{invoice}/create', [InstallmentController::class, 'create'])
+                    ->name('create');
+
+                Route::post('/invoice/{invoice}', [InstallmentController::class, 'store'])
+                    ->name('store');
+
+                Route::delete('/invoice/{invoice}', [InstallmentController::class, 'destroy'])
+                    ->name('destroy');
+
+                Route::post('/update-late-fees', [InstallmentController::class, 'updateLateFees'])
+                    ->name('update-late-fees');
+                    
+
+                Route::post('/{installment}/pay', [InstallmentController::class, 'pay'])
+                    ->name('pay');
+            });
+
+        // =========================
+        // Scholarships
+        // =========================
+        Route::prefix('scholarships')
+            ->name('scholarships.')
+            ->group(function () {
+
+                // Static routes আগে
+                Route::get('/applications', [ScholarshipController::class, 'applications'])
+                    ->name('applications');
+
+                Route::post('/applications', [ScholarshipController::class, 'storeApplication'])
+                    ->name('applications.store');
+
+                Route::post('/applications/{application}/approve', [ScholarshipController::class, 'approve'])
+                    ->name('applications.approve');
+
+                Route::post('/applications/{application}/reject', [ScholarshipController::class, 'reject'])
+                    ->name('applications.reject');
+
+                Route::post('/bulk-apply', [ScholarshipController::class, 'bulkApply'])
+                    ->name('bulk-apply');
+
+                Route::get('/', [ScholarshipController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/', [ScholarshipController::class, 'store'])
+                    ->name('store');
+
+                Route::put('/{scholarship}', [ScholarshipController::class, 'update'])
+                    ->name('update');
+
+                Route::delete('/{scholarship}', [ScholarshipController::class, 'destroy'])
+                    ->name('destroy');
+            });
+
+        // =========================
+        // Bank Reconciliation
+        // =========================
+        Route::prefix('accounting/banks')
+            ->name('accounting.banks.')
+            ->group(function () {
+
+                Route::get('/', [BankReconciliationController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/', [BankReconciliationController::class, 'store'])
+                    ->name('store');
+
+                // Static routes আগে
+                Route::post('/{bankAccount}/import', [BankReconciliationController::class, 'import'])
+                    ->name('import');
+
+                Route::post('/{bankAccount}/statements', [BankReconciliationController::class, 'storeStatement'])
+                    ->name('statements.store');
+
+                Route::post('/{bankAccount}/auto-match', [BankReconciliationController::class, 'autoMatch'])
+                    ->name('auto-match');
+
+                Route::get('/statements/{statement}/suggest', [BankReconciliationController::class, 'matchSuggest'])
+                    ->name('match.suggest');
+
+                Route::post('/statements/{statement}/match', [BankReconciliationController::class, 'match'])
+                    ->name('match');
+
+                Route::post('/statements/{statement}/unmatch', [BankReconciliationController::class, 'unmatch'])
+                    ->name('unmatch');
+
+                Route::post('/statements/{statement}/ignore', [BankReconciliationController::class, 'ignore'])
+                    ->name('ignore');
+
+                Route::delete('/statements/{statement}', [BankReconciliationController::class, 'destroyStatement'])
+                    ->name('statements.destroy');
+
+                Route::get('/{bankAccount}', [BankReconciliationController::class, 'show'])
+                    ->name('show');
+
+                Route::delete('/{bankAccount}', [BankReconciliationController::class, 'destroy'])
+                    ->name('destroy');
+            });
+    });
 
 
 Route::prefix('admin')
