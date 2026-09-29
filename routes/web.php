@@ -49,7 +49,13 @@ use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\InstallmentController;
 use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\BudgetController;
-
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ExamRoutineController;
+use App\Http\Controllers\Admin\ClassRoutineController;
+use App\Http\Controllers\Admin\AdmitCardController;
+use App\Http\Controllers\Admin\TeacherEvaluationController;
+use App\Http\Controllers\Admin\AdmissionTestController;
+use App\Http\Controllers\Frontend\AdmissionResultController;
 
 
 use App\Http\Controllers\FrontendController;
@@ -64,6 +70,10 @@ Route::name('frontend.')->group(function () {
     Route::get('/online-admission', [FrontendController::class, 'admission'])->name('admission');
     Route::post('/online-admission', [FrontendController::class, 'admissionSubmit'])->name('admission.submit');
     Route::get('/admission-success/{studentId}', [FrontendController::class, 'admissionSuccess'])->name('admission.success');
+    // Public (Frontend)
+    Route::get('/admission-result', [AdmissionResultController::class, 'index'])->name('frontend.admission-result');
+    Route::post('/admission-result/check', [AdmissionResultController::class, 'check'])->name('frontend.admission-result.check');
+
 });
 
 
@@ -98,6 +108,150 @@ Route::prefix('payment')->name('payment.')->group(function () {
 
 
 
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'verified', 'role:Super Admin|Admin'])
+    ->group(function () {
+
+        // =========================
+        // Admission Test
+        // =========================
+        Route::prefix('admission-test')
+            ->name('admission-test.')
+            ->group(function () {
+
+                Route::get('/', [AdmissionTestController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/', [AdmissionTestController::class, 'store'])
+                    ->name('store');
+
+                Route::post('/publish', [AdmissionTestController::class, 'publish'])
+                    ->name('publish');
+
+                Route::get('/pdf', [AdmissionTestController::class, 'pdf'])
+                    ->name('pdf');
+
+                Route::put('/{result}', [AdmissionTestController::class, 'update'])
+                    ->name('update');
+
+                Route::delete('/{result}', [AdmissionTestController::class, 'destroy'])
+                    ->name('destroy');
+            });
+
+
+        // =========================
+        // Teacher Evaluations
+        // =========================
+        Route::prefix('evaluations')
+            ->name('evaluations.')
+            ->group(function () {
+
+                Route::get('/', [TeacherEvaluationController::class, 'index'])
+                    ->name('index');
+
+                Route::get('/create', [TeacherEvaluationController::class, 'create'])
+                    ->name('create');
+
+                Route::post('/', [TeacherEvaluationController::class, 'store'])
+                    ->name('store');
+
+                Route::get('/report', [TeacherEvaluationController::class, 'report'])
+                    ->name('report');
+
+                Route::get('/teacher/{teacher}', [TeacherEvaluationController::class, 'show'])
+                    ->name('show');
+
+                Route::delete('/{evaluation}', [TeacherEvaluationController::class, 'destroy'])
+                    ->name('destroy');
+            });
+
+
+        // =========================
+        // Admit Cards
+        // =========================
+        Route::prefix('admit-cards')
+            ->name('admit-cards.')
+            ->group(function () {
+
+                Route::get('/', [AdmitCardController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/generate', [AdmitCardController::class, 'generate'])
+                    ->name('generate');
+
+                Route::get('/{exam}/student/{student}', [AdmitCardController::class, 'single'])
+                    ->name('single');
+            });
+
+
+        // =========================
+        // Class Routines
+        // =========================
+        Route::prefix('class-routines')
+            ->name('class-routines.')
+            ->group(function () {
+
+                Route::get('/', [ClassRoutineController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/', [ClassRoutineController::class, 'store'])
+                    ->name('store');
+
+                Route::get('/pdf', [ClassRoutineController::class, 'pdf'])
+                    ->name('pdf');
+
+                Route::delete('/{routine}', [ClassRoutineController::class, 'destroy'])
+                    ->name('destroy');
+            });
+
+
+        // =========================
+        // Exam Routines
+        // =========================
+        Route::prefix('exams/{exam}/routine')
+            ->name('exams.routine.')
+            ->group(function () {
+
+                Route::get('/', [ExamRoutineController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/', [ExamRoutineController::class, 'store'])
+                    ->name('store');
+
+                Route::post('/bulk', [ExamRoutineController::class, 'bulkStore'])
+                    ->name('bulk');
+
+                Route::get('/pdf', [ExamRoutineController::class, 'pdf'])
+                    ->name('pdf');
+
+                Route::delete('/{routine}', [ExamRoutineController::class, 'destroy'])
+                    ->name('destroy');
+            });
+
+
+        // =========================
+        // Activity Log
+        // =========================
+        Route::prefix('activity-log')
+            ->name('activity-log.')
+            ->group(function () {
+
+                Route::get('/', [ActivityLogController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/cleanup', [ActivityLogController::class, 'cleanup'])
+                    ->name('cleanup');
+
+                Route::get('/subject/{type}/{id}', [ActivityLogController::class, 'forSubject'])
+                    ->name('for-subject');
+
+                Route::get('/{activity}', [ActivityLogController::class, 'show'])
+                    ->name('show');
+            });
+    });
+
+    
 Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'verified', 'role:Super Admin|Admin'])

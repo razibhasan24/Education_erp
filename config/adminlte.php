@@ -1198,7 +1198,69 @@ return [
                 ],
             ],
         ],
+['header' => 'অতিরিক্ত মডিউল'],
 
+// Exam Routine
+[
+    'text' => 'পরীক্ষার রুটিন',
+    'icon' => 'fas fa-calendar-alt',
+    'can'  => 'exam-manage',
+    'submenu' => [
+        ['text' => 'সব পরীক্ষা', 'url' => 'admin/exams', 'icon' => 'fas fa-list', 'can' => 'exam-manage'],
+    ],
+],
+
+// Class Routine
+[
+    'text' => 'ক্লাস রুটিন',
+    'icon' => 'fas fa-calendar-week',
+    'can'  => 'class-manage',
+    'submenu' => [
+        ['text' => 'সাপ্তাহিক রুটিন', 'url' => 'admin/class-routines', 'icon' => 'fas fa-table', 'can' => 'class-manage'],
+    ],
+],
+
+// Admit Card
+[
+    'text' => 'প্রবেশপত্র',
+    'icon' => 'fas fa-ticket-alt',
+    'can'  => 'exam-manage',
+    'submenu' => [
+        ['text' => 'Admit Card জেনারেট', 'url' => 'admin/admit-cards', 'icon' => 'fas fa-download', 'can' => 'exam-manage'],
+    ],
+],
+
+// Teacher Evaluation
+[
+    'text' => 'শিক্ষক মূল্যায়ন',
+    'icon' => 'fas fa-star',
+    'can'  => 'teacher-manage',
+    'submenu' => [
+        ['text' => 'সব মূল্যায়ন', 'url' => 'admin/evaluations', 'icon' => 'fas fa-list', 'can' => 'teacher-manage'],
+        ['text' => 'নতুন মূল্যায়ন', 'url' => 'admin/evaluations/create', 'icon' => 'fas fa-plus', 'can' => 'teacher-manage'],
+        ['text' => 'রিপোর্ট', 'url' => 'admin/evaluations/report', 'icon' => 'fas fa-chart-bar', 'can' => 'teacher-manage'],
+    ],
+],
+
+// Admission Test Result
+[
+    'text' => 'ভর্তি পরীক্ষা',
+    'icon' => 'fas fa-file-signature',
+    'can'  => 'student-manage',
+    'submenu' => [
+        ['text' => 'ফলাফল এন্ট্রি', 'url' => 'admin/admission-test', 'icon' => 'fas fa-edit', 'can' => 'student-manage'],
+    ],
+],
+
+// Activity Log
+[
+    'text' => 'Activity Log',
+    'icon' => 'fas fa-history',
+    'can'  => 'institute-settings',
+    'submenu' => [
+        ['text' => 'Audit Trail', 'url' => 'admin/activity-log', 'icon' => 'fas fa-list', 'can' => 'institute-settings'],
+    ],
+],
 
     ['header' => 'ACCOUNT'],
 

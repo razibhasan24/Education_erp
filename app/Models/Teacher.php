@@ -28,6 +28,11 @@ class Teacher extends Model
     {
         return $this->belongsTo(User::class, 'paid_by');
     }
+    // app/Models/Teacher.php
+    public function evaluations()
+    {
+        return $this->hasMany(\App\Models\TeacherEvaluation::class);
+    }
 
     public static function boot()
     {
