@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
     use Notifiable, HasRoles;
+    use LogsActivity;
+
 
     protected $fillable = [
         'name',
@@ -34,6 +38,15 @@ class User extends Authenticatable
         ];
     }
 
+     public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
+    
     public function student()
     {
         return $this->hasOne(Student::class);

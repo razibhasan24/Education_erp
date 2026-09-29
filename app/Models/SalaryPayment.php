@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class SalaryPayment extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'voucher_no', 'teacher_id', 'month', 'year', 'basic_salary',
         'allowance', 'deduction', 'net_salary', 'payment_date',
@@ -13,7 +17,15 @@ class SalaryPayment extends Model
     ];
 
     protected $casts = ['payment_date' => 'date'];
-
+    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);

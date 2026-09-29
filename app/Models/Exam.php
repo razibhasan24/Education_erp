@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Exam extends Model
 {
+    use LogsActivity;
+    
     protected $fillable = [
         'name', 'name_bn', 'exam_type', 'academic_year_id',
         'start_date', 'end_date', 'description', 'is_published', 'is_active',
@@ -17,6 +21,16 @@ class Exam extends Model
         'is_published' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
 
     public function academicYear()
     {

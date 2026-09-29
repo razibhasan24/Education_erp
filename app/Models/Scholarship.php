@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Scholarship extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'name', 'code', 'type', 'value', 'applicable_to', 'fee_category_id',
         'criteria_type', 'min_gpa', 'max_income', 'max_recipients',
@@ -18,6 +22,15 @@ class Scholarship extends Model
         'end_date' => 'date',
         'value' => 'decimal:2',
     ];
+    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
 
     public function feeCategory()
     {

@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class ExamSubject extends Model
 {
+    use LogsActivity;
+
+    
     protected $fillable = [
         'exam_id', 'class_id', 'subject_id', 'group_id',
         'full_marks', 'pass_marks', 'written_marks', 'mcq_marks',
@@ -16,6 +21,15 @@ class ExamSubject extends Model
         'exam_date' => 'date',
     ];
 
+     public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
+    
     public function exam()
     {
         return $this->belongsTo(Exam::class);

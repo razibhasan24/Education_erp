@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Budget extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'name', 'academic_year_id', 'year', 'type',
         'account_id', 'budgeted_amount', 'actual_amount',
@@ -18,6 +22,14 @@ class Budget extends Model
         'actual_amount' => 'decimal:2',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     public function account()
     {
         return $this->belongsTo(Account::class);

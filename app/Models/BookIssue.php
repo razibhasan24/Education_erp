@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class BookIssue extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'issue_no', 'book_id', 'student_id', 'teacher_id', 'issue_date',
         'due_date', 'return_date', 'fine_amount', 'status', 'remarks',
@@ -18,6 +21,14 @@ class BookIssue extends Model
         'return_date' => 'date',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     public function book()
     {
         return $this->belongsTo(Book::class);

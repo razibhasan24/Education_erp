@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class JournalEntry extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'voucher_no', 'entry_date', 'reference', 'narration',
         'total_debit', 'total_credit', 'type',
@@ -20,6 +24,14 @@ class JournalEntry extends Model
         'total_credit' => 'decimal:2',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     /*
     |--------------------------------------------------------------------------
     | Relationships

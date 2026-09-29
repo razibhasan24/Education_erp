@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class FeeRefund extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'refund_no', 'student_id', 'fee_invoice_id', 'fee_payment_id',
         'amount', 'reason', 'refund_date', 'refund_method',
@@ -19,6 +23,14 @@ class FeeRefund extends Model
         'amount' => 'decimal:2',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     public function student()
     {
         return $this->belongsTo(Student::class);

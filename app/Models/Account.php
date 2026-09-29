@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Account extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'code', 'name', 'name_bn', 'type', 'sub_type',
         'parent_id', 'is_system', 'is_active',
@@ -25,6 +29,14 @@ class Account extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     public function parent()
     {
         return $this->belongsTo(Account::class, 'parent_id');

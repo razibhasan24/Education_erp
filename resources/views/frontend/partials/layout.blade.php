@@ -109,7 +109,7 @@
         </div>
         <hr class="border-secondary">
         <div class="text-center">
-            &copy; {{ date('Y') }} {{ $settings->institute_name ?? 'USMS' }}. All rights reserved.
+            &copy; {{ date('Y') }} {{ $settings->institute_name ?? 'USMS' }}.design & Developed by Razib Hasan All rights reserved.
         </div>
     </div>
 </footer>

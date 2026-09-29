@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class FeePayment extends Model
 {
+    use LogsActivity;
+    
     protected $fillable = [
         'receipt_no', 'fee_invoice_id', 'student_id', 'payment_date',
         'amount', 'discount', 'fine', 'payment_method', 'transaction_id',
@@ -14,6 +17,15 @@ class FeePayment extends Model
 
     protected $casts = ['payment_date' => 'date'];
 
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student');
+    }
     public function invoice()
     {
         return $this->belongsTo(FeeInvoice::class, 'fee_invoice_id');
